@@ -1,0 +1,1 @@
+/* NativeXHR component to be extracted here */

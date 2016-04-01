@@ -1,0 +1,1 @@
+/* Flickr settings to be extracted here */

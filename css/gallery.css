@@ -1,0 +1,111 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #000;
+  text-align: center;
+}
+
+
+/* TO-DO: we are going to not show stray photos in a last row */
+
+.thumbnail {
+  height: 150px;
+  width: 150px;
+  overflow: hidden;
+  margin: 5px;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: 150px;
+  cursor: pointer;
+  display: inline-block;
+  border: 1px solid #000;
+  border-radius: 2px;
+  background-color: #212121;
+}
+
+.thumbnail:hover {
+  border: 1px solid #eee;
+}
+
+.current  {
+  border: 1px solid #ddd;
+}
+.grid {
+  line-height: 0;
+}
+
+.modal {
+  position: absolute;
+  height: auto;
+  top: 25%;
+  left: 40%;
+  display: block;
+  z-index: 101;
+  display: none;
+}
+
+.modalHeader {
+
+}
+
+.modalContents {
+  width: auto;
+  min-height: 56px;
+  max-height: none;
+  height: auto;
+  position: relative;
+  border: 0;
+  padding: .5em 1em;
+  background: none;
+  overflow: auto;
+  background-color: #000;
+}
+
+.modalClose {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 30px;
+  height: 30px;
+  z-index: 103;
+  cursor: pointer;
+  opacity: .7;
+  border: 0;
+  font-size: 26px;
+  line-height: 0;
+  color: #666;
+  background-color: transparent;
+}
+
+.modalOverlay {
+  z-index: 100;
+  background-color: rgb(50,50,50);
+  opacity: .7;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.photoNav {
+  cursor: pointer;
+  position: absolute;
+  top: 44%;
+  height: 40px;
+  width: 40px;
+  border-radius: 20px;
+  background-color: rgba(255, 255, 255, 0.4);
+  z-index: 104;
+  font-size: 22px;
+  line-height: 0;
+  color: #aaa;
+  border: 0;
+}
+
+.viewNext {
+    left: 90%;
+}
+
+.viewPrev {
+    right: 90%;
+}

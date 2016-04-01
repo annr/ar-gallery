@@ -74,6 +74,8 @@ var Carousel = {
       'class': 'modalImage'
     });
 
+    Carousel.modalTitle = Helper.utils.newElem('figcaption', modalContents);
+
     var close = new CloseButton();
     close.init(modalContents);
     ['viewNext','viewPrev'].forEach(function(item) {
@@ -81,7 +83,7 @@ var Carousel = {
       button.init(item, Carousel.modal);
     });
 
-    window.addEventListener("keyup", function(e){
+    window.addEventListener("keydown", function(e){
       // PREV
       if(e.keyCode == 37) Carousel.prevPhoto();
 
@@ -106,6 +108,7 @@ var Carousel = {
   selectPhoto: function(index) {
     var thumb = document.getElementById(index);
     Carousel.modalImage.setAttribute('src', thumb.getAttribute('data-image-souce'));
+    Carousel.modalTitle.innerHTML = thumb.getAttribute('data-title');
     Carousel.modalImage.setAttribute('data-index', index);
   },
 
@@ -116,6 +119,7 @@ var Carousel = {
     Carousel.modalImage.setAttribute('data-index', id);
     Carousel.modal.style.display = 'inline-block';
 
+    Carousel.modalTitle.innerHTML = thumb.getAttribute('data-title');
     Carousel.modalOverlay = Helper.utils.newElem('div', document.body, {
       'class': 'modalOverlay'
     });
@@ -197,6 +201,7 @@ function Thumbnail() {
       'id': index,
       'class': 'thumbnail',
       'data-image-souce': largeSrc,
+      'data-title': item.title,
       'data-id': item.id
     });
 
@@ -232,11 +237,27 @@ var ImageGrid = {
   }
 };
 
+var Heading = {
+
+  init: function(photoset) {
+    var header = this.makeTarget();
+    var heading = Helper.utils.newElem('h1', header);
+    heading.innerHTML = '"' + photoset.title + '"';
+    var subHeading = Helper.utils.newElem('h2', header);
+    subHeading.innerHTML = 'By ' + photoset.ownername;
+  },
+
+  makeTarget: function() {
+    return Helper.utils.newElem('header', document.body);
+  }
+
+};
+
 var rawRes = '{"photoset":{"id":"1047939","primary":"71973493","owner":"22653270@N00","ownername":"Paula Wirth","photo":[{"id":"5076508681","secret":"0cae33ea31","server":"4089","farm":5,"title":"feeling lucky?","isprimary":"0","ispublic":1,"isfriend":0,"isfamily":0},{"id":"4790859508","secret":"9c062ea0b8","server":"4096","farm":5,"title":"Discoland Records","isprimary":"0","ispublic":1,"isfriend":0,"isfamily":0},{"id":"4790223857","secret":"6d0f46ef15","server":"4115","farm":5,"title":"Ricci\'s Liquors","isprimary":"0","ispublic":1,"isfriend":0,"isfamily":0},{"id":"4790855816","secret":"1790e83368","server":"4102","farm":5,"title":"SANCHEZ","isprimary":"0","ispublic":1,"isfriend":0,"isfamily":0},{"id":"4790131203","secret":"9f7e1c3441","server":"4118","farm":5,"title":"the real deal","isprimary":"0","ispublic":1,"isfriend":0,"isfamily":0},{"id":"4729015651","secret":"9586e6b372","server":"1342","farm":2,"title":"Parkway Theater","isprimary":"0","ispublic":1,"isfriend":0,"isfamily":0},{"id":"4660252010","secret":"f58eeb82e2","server":"4029","farm":5,"title":"Bow & Arrow Motel","isprimary":"0","ispublic":1,"isfriend":0,"isfamily":0},{"id":"4540125298","secret":"59f73aa975","server":"2713","farm":3,"title":"new customer","isprimary":"0","ispublic":1,"isfriend":0,"isfamily":0},{"id":"4539489761","secret":"595a3ffce4","server":"4025","farm":5,"title":"Hofbrau","isprimary":"0","ispublic":1,"isfriend":0,"isfamily":0},{"id":"4532907300","secret":"b69e769d97","server":"4068","farm":5,"title":"Madonna Inn","isprimary":"0","ispublic":1,"isfriend":0,"isfamily":0},{"id":"4335401974","secret":"aceba2faca","server":"4012","farm":5,"title":"Oakland Fox Theatre","isprimary":"0","ispublic":1,"isfriend":0,"isfamily":0},{"id":"4327375030","secret":"01992f0d4f","server":"2790","farm":3,"title":"renewing","isprimary":"0","ispublic":1,"isfriend":0,"isfamily":0},{"id":"4286425468","secret":"f6117d20f0","server":"4072","farm":5,"title":"Carol\'s Apts","isprimary":"0","ispublic":1,"isfriend":0,"isfamily":0},{"id":"4262759899","secret":"a829bd0708","server":"4011","farm":5,"title":"giant value on mission","isprimary":"0","ispublic":1,"isfriend":0,"isfamily":0},{"id":"3628476926","secret":"59c414fa1a","server":"3333","farm":4,"title":"EAT","isprimary":"0","ispublic":1,"isfriend":0,"isfamily":0},{"id":"3627664771","secret":"001fb6b799","server":"2480","farm":3,"title":"IMG_5308","isprimary":"0","ispublic":1,"isfriend":0,"isfamily":0},{"id":"3627664067","secret":"6e49bba9fe","server":"3032","farm":4,"title":"IMG_5301","isprimary":"0","ispublic":1,"isfriend":0,"isfamily":0},{"id":"3628475170","secret":"cc61953a66","server":"2480","farm":3,"title":"IMG_5300","isprimary":"0","ispublic":1,"isfriend":0,"isfamily":0},{"id":"3627662979","secret":"99239be708","server":"3611","farm":4,"title":"IMG_5299","isprimary":"0","ispublic":1,"isfriend":0,"isfamily":0},{"id":"3609410907","secret":"fe8e8d8810","server":"3620","farm":4,"title":"he\'s got moxie","isprimary":"0","ispublic":1,"isfriend":0,"isfamily":0},{"id":"3548284164","secret":"aa8bfdb28f","server":"3574","farm":4,"title":"it\'s a sign","isprimary":"0","ispublic":1,"isfriend":0,"isfamily":0},{"id":"3488387016","secret":"7eb529c0b0","server":"3066","farm":4,"title":"Electric cherry","isprimary":"0","ispublic":1,"isfriend":0,"isfamily":0},{"id":"3488382094","secret":"da68ee2379","server":"3614","farm":4,"title":"IMG_3658","isprimary":"0","ispublic":1,"isfriend":0,"isfamily":0},{"id":"3488381592","secret":"056e7930ba","server":"3538","farm":4,"title":"IMG_3656","isprimary":"0","ispublic":1,"isfriend":0,"isfamily":0},{"id":"3488381086","secret":"aa9d5b19c4","server":"3600","farm":4,"title":"IMG_3655","isprimary":"0","ispublic":1,"isfriend":0,"isfamily":0},{"id":"3469803607","secret":"9bf63a5a91","server":"3629","farm":4,"title":"Homestyle","isprimary":"0","ispublic":1,"isfriend":0,"isfamily":0},{"id":"3469733719","secret":"c337cbf296","server":"3521","farm":4,"title":"Real Homestyle Cooking","isprimary":"0","ispublic":1,"isfriend":0,"isfamily":0},{"id":"3465175134","secret":"ecd8fc2802","server":"3624","farm":4,"title":"EAT","isprimary":"0","ispublic":1,"isfriend":0,"isfamily":0},{"id":"3465125784","secret":"46ce1d4e65","server":"3593","farm":4,"title":"EAT","isprimary":"0","ispublic":1,"isfriend":0,"isfamily":0},{"id":"3464309847","secret":"e2dee6c8a7","server":"3616","farm":4,"title":"EAT","isprimary":"0","ispublic":1,"isfriend":0,"isfamily":0}],"page":1,"per_page":"30","perpage":"30","pages":14,"total":"415","title":"Vintage Signs"},"stat":"ok"}';
 
 var res = JSON.parse(rawRes);
 
 // one image grid and one carousel.
-
+Heading.init(res.photoset);
 ImageGrid.init(res.photoset);
 Carousel.init();

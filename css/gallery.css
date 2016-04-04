@@ -64,17 +64,23 @@ figcaption {
   display: none;
 }
 
-@media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+@media only screen and (min-device-width : 320px) and (max-device-width : 768px) {
   .modal {
     top: 100px;
     left: 0;
   }
 }
 
+@media only screen and (min-device-width : 768px) and (max-device-width : 1024px) {
+  .modal {
+    top: 15%;
+    left: 25%;
+  }
+}
+
 @media only screen and (min-width : 1224px) {
   .modal {
-    top: 20%;
-    left: 25%;
+    left: 30%;
   }
 }
 

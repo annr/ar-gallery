@@ -57,12 +57,25 @@ figcaption {
 .modal {
   position: absolute;
   height: auto;
-  width: 780px;
   top: 18%;
   left: 20%;
   display: block;
   z-index: 101;
   display: none;
+}
+
+@media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+  .modal {
+    top: 100px;
+    left: 0;
+  }
+}
+
+@media only screen and (min-width : 1224px) {
+  .modal {
+    top: 20%;
+    left: 25%;
+  }
 }
 
 .modalContents {

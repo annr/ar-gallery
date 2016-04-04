@@ -20,8 +20,6 @@ Features
 Missing (to-do maybe)
 -------------
 
-* Bigger images required
-* Add tests
 * Current photo highlighted
 * Uses thumb as lightbox placholder while loading larger image (hand-made progressive jpeg)
 * Loading status bar

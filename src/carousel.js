@@ -3,116 +3,20 @@
  * Photo lightbox with next, previous and close buttons
  * Handles hide and show photo
  */
+
+var Helper = Helper || {};
+
 'use strict';
-
-var Carousel = {
-  init: function() {
-    Carousel.buildModal();
-  },
-
-  nextPhoto: function() {
-    // type conversion FTW!
-    if((Carousel.currentPhotoIndex() + 1) == ImageGrid.imagesCount) {
-     Carousel.selectPhoto(0);
-    } else {
-      Carousel.selectPhoto(Carousel.currentPhotoIndex() + 1);
-    }
-  },
-
-  prevPhoto: function() {
-    if(Carousel.currentPhotoIndex() == 0) {
-     Carousel.selectPhoto(ImageGrid.imagesCount - 1);
-    } else {
-      Carousel.selectPhoto(Carousel.currentPhotoIndex() - 1);
-    }
-  },
-
-  buildModal: function() {
-    //
-    //  - modal
-    //    - modal-contents
-    //      - modal-close
-    //      - modal-img
-    //
-    //  - modal-overlay
-    //
-    Carousel.modal = Helper.utils.newElem('div', document.body, {
-      'class': 'modal',
-      'id': 'modal'
-    });
-
-    Carousel.modalContents = Helper.utils.newElem('div', modal, {
-      'class': 'modalContents',
-      'id': 'modalContents'
-    });
-
-    Carousel.modalImage = Helper.utils.newElem('img', modalContents, {
-      'alt': 'currentPhoto',
-      'id': 'currentPhoto',
-      'class': 'modalImage'
-    });
-
-    Carousel.modalTitle = Helper.utils.newElem('figcaption', modalContents);
-
-    var close = new CloseButton();
-    close.init(modalContents);
-    ['viewNext','viewPrev'].forEach(function(item) {
-      var button = new NavigationButton();
-      button.init(item, Carousel.modal);
-    });
-
-    window.addEventListener("keydown", function(e){
-      // PREV
-      if(e.keyCode == 37) Carousel.prevPhoto();
-
-      // NEXT
-      if(e.keyCode == 39) Carousel.nextPhoto();
-
-      // ESC
-      if(e.keyCode == 27) Carousel.hidePhoto();
-    });
-
-  },
-
-  hidePhoto: function() {
-    Carousel.modal.style.display = 'none';
-    document.body.removeChild(Carousel.modalOverlay);
-  },
-
-  currentPhotoIndex: function() {
-    return new Number(Carousel.modalImage.getAttribute('data-index'));
-  },
-
-  selectPhoto: function(index) {
-    var thumb = document.getElementById(index);
-    Carousel.modalImage.setAttribute('src', thumb.getAttribute('data-image-souce'));
-    Carousel.modalTitle.innerHTML = thumb.getAttribute('data-title');
-    Carousel.modalImage.setAttribute('data-index', index);
-  },
-
-  showPhoto: function(id) {
-    // To-DO: make accessor function so you can simplify this code
-    var thumb = document.getElementById(id);
-    Carousel.modalImage.setAttribute('src', thumb.getAttribute('data-image-souce'));
-    Carousel.modalImage.setAttribute('data-index', id);
-    Carousel.modal.style.display = 'inline-block';
-
-    Carousel.modalTitle.innerHTML = thumb.getAttribute('data-title');
-    Carousel.modalOverlay = Helper.utils.newElem('div', document.body, {
-      'class': 'modalOverlay'
-    });
-  }
-
-};
-
 
 function CloseButton() {
 
-  this.init = function(target) {
-    var close = this.makeButton(target);
+  'use strict';
+
+  this.init = function(carousel) {
+    var close = this.makeButton(carousel.modalContents);
     close.innerHTML = 'X';
-    close.addEventListener("click", function(e) {
-      Carousel.hidePhoto();
+    close.addEventListener("click", function() {
+      carousel.hidePhoto();
     });
   };
 
@@ -126,15 +30,17 @@ function CloseButton() {
 
   return this;
 
-};
+}
 
 
 function NavigationButton() {
 
-  this.init = function(direction, target) {
+  'use strict';
+
+  this.init = function(direction, carousel) {
 
     var arrow = '&lt;';
-    var button = Helper.utils.newElem('button', target, {
+    var button = Helper.utils.newElem('button', carousel.modalContents, {
       'alt': direction,
       'class': 'photoNav ' + direction + ' galleryButton'
     });
@@ -145,10 +51,118 @@ function NavigationButton() {
 
     button.innerHTML = arrow;
 
-    button.addEventListener("click", function(e) {
-      (direction === 'viewNext') ? Carousel.nextPhoto() : Carousel.prevPhoto();
+    button.addEventListener("click", function() {
+      direction === 'viewNext' ? carousel.nextPhoto() : carousel.prevPhoto();
     });
   };
 
   return this;
+}
+
+function Carousel() {
+
+  'use strict';
+  return {
+
+    init: function(opts) {
+
+      var _self = this;
+      this.imagesCount = opts.imagesCount;
+      this.buildModal();
+
+      // add click handler to thumbnails
+
+      var thumbnails = document.getElementsByClassName('thumbnail');
+
+      Array.prototype.forEach.call(thumbnails, function(thumb) {
+        thumb.addEventListener("click", function(e) {
+          _self.showPhoto(e.target.getAttribute('id'));
+        });
+      });
+
+    },
+
+    nextPhoto: function() {
+      if((this.currentPhotoIndex() + 1) === this.imagesCount) {
+        this.selectPhoto(0);
+      } else {
+        this.selectPhoto(this.currentPhotoIndex() + 1);
+      }
+    },
+
+    prevPhoto: function() {
+      if(this.currentPhotoIndex() === 0) {
+        this.selectPhoto(this.imagesCount - 1);
+      } else {
+        this.selectPhoto(this.currentPhotoIndex() - 1);
+      }
+    },
+
+    buildModal: function() {
+      //
+      //  - modal
+      //    - modal-contents
+      //      - modal-close
+      //      - modal-img
+      //
+      //  - modal-overlay
+      //
+      this.gallery = document.getElementById('gallery');
+
+      this.modal = Helper.utils.newElem('div', gallery, {
+        'class': 'modal',
+        'id': 'modal'
+      });
+
+      this.modalContents = Helper.utils.newElem('div', this.modal, {
+        'class': 'modalContents',
+        'id': 'modalContents'
+      });
+
+      this.modalImage = Helper.utils.newElem('img', this.modalContents, {
+        'alt': 'currentPhoto',
+        'id': 'currentPhoto',
+        'class': 'modalImage'
+      });
+
+      this.modalTitle = Helper.utils.newElem('figcaption', this.modalContents);
+
+      var close = new CloseButton();
+      close.init(this);
+      ['viewNext','viewPrev'].forEach(function(item) {
+        var button = new NavigationButton();
+        button.init(item, this);
+      }, this);
+
+    },
+
+    hidePhoto: function() {
+      this.modal.style.display = 'none';
+      this.gallery.removeChild(this.modalOverlay);
+    },
+
+    currentPhotoIndex: function() {
+      return parseInt(this.modalImage.getAttribute('data-index'), 10);
+    },
+
+    selectPhoto: function(index) {
+      var thumb = document.getElementById(index);
+      this.modalImage.setAttribute('src', thumb.getAttribute('data-image-souce'));
+      this.modalTitle.innerHTML = thumb.getAttribute('data-title');
+      this.modalImage.setAttribute('data-index', index);
+    },
+
+    showPhoto: function(id) {
+      // To-DO: make accessor function so you can simplify this code
+      var thumb = document.getElementById(id);
+      this.modalImage.setAttribute('src', thumb.getAttribute('data-image-souce'));
+      this.modalImage.setAttribute('data-index', id);
+      this.modal.style.display = 'inline-block';
+
+      this.modalTitle.innerHTML = thumb.getAttribute('data-title');
+      this.modalOverlay = Helper.utils.newElem('div', this.gallery, {
+        'class': 'modalOverlay'
+      });
+    }
+  };
 }

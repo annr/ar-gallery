@@ -57,15 +57,12 @@ figcaption {
 .modal {
   position: absolute;
   height: auto;
-  top: 25%;
-  left: 40%;
+  width: 780px;
+  top: 18%;
+  left: 20%;
   display: block;
   z-index: 101;
   display: none;
-}
-
-.modalHeader {
-
 }
 
 .modalContents {
@@ -76,7 +73,6 @@ figcaption {
   position: relative;
   padding: .5em 1em;
   background: none;
-  overflow: auto;
   background-color: #000;
 }
 
@@ -99,7 +95,7 @@ figcaption {
   right: 0;
   top: 0;
   line-height: 0;
-  color: #666;
+  color: yellow;
   background-color: transparent;
 }
 
@@ -124,9 +120,9 @@ figcaption {
 }
 
 .viewNext {
-    left: 90%;
+  right: -10px;
 }
 
 .viewPrev {
-    right: 90%;
+  left: -10px;
 }

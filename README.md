@@ -30,4 +30,6 @@ Missing (to-do maybe)
 * Accessibilize (Run Brendan McKeon's accessibility tool on gallery)
 * Develop with live-reloading for speed
 * Make sure that navigation buttons stay in the same place so one can click like a maniac
+* Extract Flickr settings info out of Thumbnail
+* Split photo navigation: when the cursor is toward one half of the image, navigation buttons brighten
 * Could make this a plugin

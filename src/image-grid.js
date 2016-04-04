@@ -6,7 +6,8 @@ var ImageGrid = {
 
   init: function(photoset) {
     // make a grid of thumbnails
-    var grid = this.makeTarget();
+    var gallery = document.getElementById('gallery');
+    var grid = this.makeTarget(gallery);
     photoset.photo.forEach(function(item, i) {
       var thumb = new Thumbnail();
       thumb.init(i, { 'model': item, 'target': grid });
@@ -14,8 +15,8 @@ var ImageGrid = {
     this.imagesCount = photoset.photo.length;
   },
 
-  makeTarget: function() {
-    return Helper.utils.newElem('div', document.body, {
+  makeTarget: function(target) {
+    return Helper.utils.newElem('div', target, {
       'class': 'grid',
       'id': 'grid'
     });

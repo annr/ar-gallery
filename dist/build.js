@@ -1,78 +1,12 @@
-'use strict';
-
-/* 
- * Flickr Settings: move this out into it's own file.
- */
-
-var setIds = [
-  //'1047939', // Vintage signs, from the East Bay, I think.
-  '72157604010317412' // Wow Yosemite
-];
-
-var FlickrSettings = (function (setId) {
-
-  var apiKey = '4fb7a02e3fbe80e509aa1719b82f23fd'; // This is mine, get your own. :P
-  var pageLimit = 30;
-
-  return {
-    url: function() {
-      return "https://api.flickr.com/services/rest/" + // API base URL
-        "?method=flickr.photosets.getPhotos" +
-        "&api_key=" + apiKey +  // Personal flickr API key
-        "&photoset_id=" + setId +
-        "&privacy_filter=1" +
-        "&per_page=" + pageLimit +
-        "&format=json&nojsoncallback=1";
-    }
-  };
-})(setIds[Math.floor(Math.random()*setIds.length)]); // get one of the setIds at random
-
-
-/*
- * NativeXHR
- */
-
-var req = new XMLHttpRequest();
-req.addEventListener("load", transferComplete);
-req.open("GET", FlickrSettings.url());
-req.send();
-
-function transferComplete(evt) {
-  var res = JSON.parse(evt.target.response);
-  // one image grid and one carousel.
-  Heading.init(res.photoset);
-  ImageGrid.init(res.photoset);
-  Carousel.init();
-}
-
-/* Helper.utils
- */
-
-var Helper = {};
-
-Helper.utils = (function () {
-  return {
-    newElem: function(tag, target, obj) {
-      var el = document.createElement(tag || 'div');
-      for (var prop in obj) {
-        el.setAttribute(prop, obj[prop]);
-      }
-      if (!target) {
-        return el;
-      }
-      return target.appendChild(el);
-    }
-  };
-})();
-
-/* Carousel 
+;(function( window, undefined ){ 
+ 'use strict';/* Carousel 
  *
  * Photo lightbox with next, previous and close buttons
  * Handles hide and show photo
  */
 
 var Carousel = {
-  init: function(elem) {
+  init: function() {
     Carousel.buildModal();
   },
 
@@ -171,6 +105,7 @@ var Carousel = {
 
 };
 
+
 function CloseButton() {
 
   this.init = function(target) {
@@ -217,7 +152,104 @@ function NavigationButton() {
 
   return this;
 }
+/* 
+ * Flickr Settings: move this out into it's own file.
+ */
 
+var setIds = [
+  //'1047939', // Vintage signs, from the East Bay, I think.
+  '72157604010317412' // Wow Yosemite
+];
+
+var FlickrSettings = (function (setId) {
+
+  var apiKey = '4fb7a02e3fbe80e509aa1719b82f23fd'; // This is mine, get your own. :P
+  var pageLimit = 30;
+
+  return {
+    url: function() {
+      return "https://api.flickr.com/services/rest/" + // API base URL
+        "?method=flickr.photosets.getPhotos" +
+        "&api_key=" + apiKey +  // Personal flickr API key
+        "&photoset_id=" + setId +
+        "&privacy_filter=1" +
+        "&per_page=" + pageLimit +
+        "&format=json&nojsoncallback=1";
+    }
+  };
+})(setIds[Math.floor(Math.random()*setIds.length)]); // get one of the setIds at random
+/* Launch point, maybe */
+var Heading = {
+
+  init: function(photoset) {
+    var header = this.makeTarget();
+    var heading = Helper.utils.newElem('h1', header);
+    heading.innerHTML = '"' + photoset.title + '"';
+    var subHeading = Helper.utils.newElem('h2', header);
+    subHeading.innerHTML = 'By ' + photoset.ownername;
+  },
+
+  makeTarget: function() {
+    return Helper.utils.newElem('header', document.body);
+  }
+
+};
+/* Helper.utils
+ */
+
+var Helper = {};
+
+Helper.utils = (function () {
+  return {
+    newElem: function(tag, target, obj) {
+      var el = document.createElement(tag || 'div');
+      for (var prop in obj) {
+        el.setAttribute(prop, obj[prop]);
+      }
+      if (!target) {
+        return el;
+      }
+      return target.appendChild(el);
+    }
+  };
+})();
+var ImageGrid = {
+
+  'imagesCount': undefined,
+
+  init: function(photoset) {
+    // make a grid of thumbnails
+    var grid = this.makeTarget();
+    photoset.photo.forEach(function(item, i) {
+      var thumb = new Thumbnail();
+      thumb.init(i, { 'model': item, 'target': grid });
+    });
+    this.imagesCount = photoset.photo.length;
+  },
+
+  makeTarget: function() {
+    return Helper.utils.newElem('div', document.body, {
+      'class': 'grid',
+      'id': 'grid'
+    });
+  }
+};
+/*
+ * NativeXHR
+ */
+
+function transferComplete(evt) {
+  var res = JSON.parse(evt.target.response);
+  // one image grid and one carousel.
+  Heading.init(res.photoset);
+  ImageGrid.init(res.photoset);
+  Carousel.init();
+}
+
+var req = new XMLHttpRequest();
+req.addEventListener("load", transferComplete);
+req.open("GET", FlickrSettings.url());
+req.send();
 /* Thumbnails show small images in the grid, but each thumbnail also has 
  * the full size image recorded as a data attribute for the lightbox 
  */
@@ -258,42 +290,4 @@ function Thumbnail() {
     
   };
   return this;
-}
-
-var ImageGrid = {
-
-  'imagesCount': undefined,
-
-  init: function(photoset) {
-    // make a grid of thumbnails
-    var grid = this.makeTarget();
-    photoset.photo.forEach(function(item, i) {
-      var thumb = new Thumbnail();
-      thumb.init(i, { 'model': item, 'target': grid });
-    });
-    this.imagesCount = photoset.photo.length;
-  },
-
-  makeTarget: function() {
-    return Helper.utils.newElem('div', document.body, {
-      'class': 'grid',
-      'id': 'grid'
-    });
-  }
-};
-
-var Heading = {
-
-  init: function(photoset) {
-    var header = this.makeTarget();
-    var heading = Helper.utils.newElem('h1', header);
-    heading.innerHTML = '"' + photoset.title + '"';
-    var subHeading = Helper.utils.newElem('h2', header);
-    subHeading.innerHTML = 'By ' + photoset.ownername;
-  },
-
-  makeTarget: function() {
-    return Helper.utils.newElem('header', document.body);
-  }
-
-};
+}}( window ));

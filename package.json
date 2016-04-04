@@ -1,0 +1,36 @@
+{
+  "name": "ar-gallery",
+  "version": "0.1.0",
+  "description": "Example SPA photo gallery using native javascript and tests.",
+  "main": "Gruntfile.js",
+  "scripts": {
+    "test": "grunt test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/annr/ar-gallery.git"
+  },
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-concat": "^1.0.0",
+    "grunt-contrib-jshint": "^1.0.0",
+    "grunt-contrib-requirejs": "^1.0.0",
+    "grunt-contrib-watch": "^1.0.0"
+  },
+  "keywords": [
+    "flickr",
+    "photos",
+    "gallery",
+    "lightbox",
+    "javascript",
+    "modal-dialog",
+    "cool",
+    "free-wink"
+  ],
+  "author": "Ann E. Robson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/annr/ar-gallery/issues"
+  },
+  "homepage": "https://github.com/annr/ar-gallery#readme"
+}

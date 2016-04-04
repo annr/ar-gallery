@@ -1,3 +1,5 @@
+'use strict';
+
 describe("Carousel", function() {
   //var gallery;
 
